@@ -2,7 +2,7 @@ let levels = [];
 let currentLevel = 0;
 let dragged = null;
 
-// Load levels.json and launch the first level
+// Load levels.json and start first level
 fetch("levels.json")
   .then(res => res.json())
   .then(data => {
@@ -39,7 +39,9 @@ function loadLevel(index) {
   const numbersDiv = document.getElementById("numbers");
   numbersDiv.innerHTML = "";
 
-  level.pool.forEach(num => {
+  // Randomize pool order for extra challenge
+  const shuffled = level.pool.sort(() => Math.random() - 0.5);
+  shuffled.forEach(num => {
     const div = document.createElement("div");
     div.classList.add("number");
     div.textContent = num;
@@ -92,14 +94,4 @@ function checkWin() {
 
 function nextLevel() {
   if (currentLevel < levels.length - 1) {
-    loadLevel(currentLevel + 1);
-  } else {
-    alert("🎉 You finished all levels!");
-  }
-}
-
-function prevLevel() {
-  if (currentLevel > 0) {
-    loadLevel(currentLevel - 1);
-  }
-}
+    load
