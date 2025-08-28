@@ -18,8 +18,8 @@ function loadLevel(index) {
 
   const puzzle = document.getElementById("puzzle");
   puzzle.innerHTML = "";
-  
-  // Create grid
+
+  // Make grid
   level.grid.forEach(row => {
     row.forEach(cell => {
       const div = document.createElement("div");
@@ -34,7 +34,7 @@ function loadLevel(index) {
     });
   });
 
-  // Create draggable numbers
+  // Numbers pool
   const numbersDiv = document.getElementById("numbers");
   numbersDiv.innerHTML = "";
   level.pool.forEach(num => {
@@ -48,7 +48,7 @@ function loadLevel(index) {
   setupDragAndDrop();
 }
 
-// Drag & Drop logic
+// Drag & Drop
 function setupDragAndDrop() {
   const numbers = document.querySelectorAll(".number");
   const slots = document.querySelectorAll(".empty");
@@ -93,11 +93,12 @@ function nextLevel() {
   if (currentLevel < levels.length - 1) {
     loadLevel(currentLevel + 1);
   } else {
-    alert("🎉 You finished all levels!");
+    alert("🎉 You finished all 30 levels!");
   }
 }
 function prevLevel() {
   if (currentLevel > 0) {
     loadLevel(currentLevel - 1);
   }
-}
+  }
+  
