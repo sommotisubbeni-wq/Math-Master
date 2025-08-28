@@ -1,11 +1,11 @@
 body {
   font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   background: #f4f4f4;
   margin: 0;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h2 {
@@ -40,6 +40,7 @@ h2 {
 .numbers {
   display: flex;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .number {
@@ -53,4 +54,22 @@ h2 {
   font-size: 20px;
   font-weight: bold;
   cursor: grab;
+}
+
+.controls {
+  margin-top: 15px;
+}
+
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #74b9ff;
+  color: white;
+}
+button:hover {
+  background: #0984e3;
 }
