@@ -1,34 +1,81 @@
-const numbers = document.querySelectorAll(".number");
-const slots = document.querySelectorAll(".empty");
-
+let levels = [];
+let currentLevel = 0;
 let dragged = null;
 
-// Drag start
-numbers.forEach(num => {
-  num.addEventListener("dragstart", e => {
-    dragged = num;
-    setTimeout(() => (num.style.display = "none"), 0);
+// Load levels.json
+fetch("levels.json")
+  .then(res => res.json())
+  .then(data => {
+    levels = data;
+    loadLevel(0);
   });
 
-  num.addEventListener("dragend", e => {
-    dragged.style.display = "flex";
-    dragged = null;
-  });
-});
+// Load a level
+function loadLevel(index) {
+  currentLevel = index;
+  const level = levels[index];
+  document.getElementById("level-title").textContent = level.title;
 
-// Drop into slots
-slots.forEach(slot => {
-  slot.addEventListener("dragover", e => e.preventDefault());
-
-  slot.addEventListener("drop", e => {
-    if (!slot.textContent) {
-      slot.textContent = dragged.textContent;
-      slot.classList.remove("empty");
-      dragged.remove();
-      checkWin();
-    }
+  const puzzle = document.getElementById("puzzle");
+  puzzle.innerHTML = "";
+  
+  // Create grid
+  level.grid.forEach(row => {
+    row.forEach(cell => {
+      const div = document.createElement("div");
+      div.classList.add("cell");
+      if (cell === null) {
+        div.classList.add("empty");
+        div.dataset.answer = level.answers.shift();
+      } else {
+        div.textContent = cell;
+      }
+      puzzle.appendChild(div);
+    });
   });
-});
+
+  // Create draggable numbers
+  const numbersDiv = document.getElementById("numbers");
+  numbersDiv.innerHTML = "";
+  level.pool.forEach(num => {
+    const div = document.createElement("div");
+    div.classList.add("number");
+    div.textContent = num;
+    div.setAttribute("draggable", "true");
+    numbersDiv.appendChild(div);
+  });
+
+  setupDragAndDrop();
+}
+
+// Drag & Drop logic
+function setupDragAndDrop() {
+  const numbers = document.querySelectorAll(".number");
+  const slots = document.querySelectorAll(".empty");
+
+  numbers.forEach(num => {
+    num.addEventListener("dragstart", () => {
+      dragged = num;
+      setTimeout(() => (num.style.display = "none"), 0);
+    });
+    num.addEventListener("dragend", () => {
+      dragged.style.display = "flex";
+      dragged = null;
+    });
+  });
+
+  slots.forEach(slot => {
+    slot.addEventListener("dragover", e => e.preventDefault());
+    slot.addEventListener("drop", () => {
+      if (!slot.textContent) {
+        slot.textContent = dragged.textContent;
+        slot.classList.remove("empty");
+        dragged.remove();
+        checkWin();
+      }
+    });
+  });
+}
 
 // Check win
 function checkWin() {
@@ -38,5 +85,19 @@ function checkWin() {
       return;
     }
   }
-  setTimeout(() => alert("🎉 Congratulations! Puzzle Solved!"), 200);
+  setTimeout(() => alert("🎉 Level Complete!"), 200);
+}
+
+// Navigation
+function nextLevel() {
+  if (currentLevel < levels.length - 1) {
+    loadLevel(currentLevel + 1);
+  } else {
+    alert("🎉 You finished all levels!");
+  }
+}
+function prevLevel() {
+  if (currentLevel > 0) {
+    loadLevel(currentLevel - 1);
+  }
 }
